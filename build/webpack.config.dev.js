@@ -1,15 +1,17 @@
-const { getEntries } = require('./utils.js');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge');
+const webpackConfigBase = require('./webpack.config.base.js');
 
-const config = {
+module.exports = merge(webpackConfigBase, {
   mode: 'development',
-  entry: getEntries('./src/pages', ['js', 'scss', 'twig']),
   module: {
     rules: [
       {
         test: /\.s[a|c]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          { loader: "css-loader", options: { sourceMap: true } },
+          { loader: "sass-loader", options: { sourceMap: true } },
+        ],
       },
       {
         test: /\.twig$/,
@@ -25,14 +27,6 @@ const config = {
       },
     ],
   },
-  plugins: [],
-  resolve: {
-    alias: {
-      src: path.resolve(__dirname, '../src'),
-      images: path.resolve(__dirname, '../src/assets/images'),
-      partials: path.resolve(__dirname, '../src/partials'),
-    },
-  },
   devServer: {
     hot: true,
     compress: false,
@@ -45,18 +39,4 @@ const config = {
       index: '/index',
     },
   },
-};
-
-const pages = getEntries('./src/pages', 'twig');
-const pagesConfig = Object.keys(pages).map((pathname) => {
-  return new HtmlWebpackPlugin({
-    inject: true,
-    filename: `${pathname}.html`, // выходной путь html
-    template: path.resolve(__dirname, `.${pages[pathname]}`), // путь к шаблону
-    favicon: path.resolve(__dirname, '../src/assets/favicon.ico'),
-  });
 });
-
-config.plugins = [...config.plugins, ...pagesConfig];
-
-module.exports = config;
