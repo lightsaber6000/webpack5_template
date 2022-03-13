@@ -21,6 +21,8 @@ const pagesConfig = Object.keys(pages).map((pathname) => {
     filename: `${pathname}.html`, // выходной путь html
     template: path.resolve(__dirname, `.${pages[pathname]}`), // путь к шаблону
     favicon: path.resolve(__dirname, '../src/assets/favicon.ico'),
+    chunks: [pathname],
+    chunksSortMode: 'manual',
   });
 });
 
