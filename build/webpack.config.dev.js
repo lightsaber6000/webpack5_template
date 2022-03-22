@@ -1,7 +1,7 @@
 const { merge } = require('webpack-merge');
 const webpackConfigBase = require('./webpack.config.base.js');
 
-module.exports = merge(webpackConfigBase, {
+module.exports = merge(webpackConfigBase('development'), {
   mode: 'development',
   module: {
     rules: [
@@ -32,7 +32,6 @@ module.exports = merge(webpackConfigBase, {
     compress: false,
     client: {
       reconnect: true,
-      progress: true,
       overlay: true,
     },
     historyApiFallback: {
