@@ -7,7 +7,7 @@ exports.getEntries = function (context, extension) {
 
   extension = Array.isArray(extension) ? extension : [extension];
 
-  const match = extension.length > 1 ? `.{${extension.join(',')}}` : `.${extension[0]}`;
+  const match = extension.length > 1 ? `index.{${extension.join(',')}}` : `.${extension[0]}`;
   const files = glob.sync(`${context}**/*${match}`);
   const entries = {};
 
