@@ -4,7 +4,7 @@ const { merge } = require('webpack-merge');
 const path = require('path');
 const webpackConfigBase = require('./webpack.config.base.js');
 
-module.exports = merge(webpackConfigBase, {
+module.exports = merge(webpackConfigBase('production'), {
   mode: 'production',
   module: {
     rules: [
@@ -45,10 +45,16 @@ module.exports = merge(webpackConfigBase, {
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]'
+        }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]'
+        }
       },
     ],
   },
@@ -62,13 +68,13 @@ module.exports = merge(webpackConfigBase, {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].[fullhash].css",
+      filename: "[name].css",
     }),
   ],
   output: {
     pathinfo: false,
     path: path.resolve(__dirname, '../dist'),
-    filename: 'js/[name].[fullhash].js',
+    filename: '[name].js',
     clean: true,
   },
 });
