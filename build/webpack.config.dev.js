@@ -35,7 +35,7 @@ module.exports = merge(webpackConfigBase('development'), {
       overlay: true,
     },
     historyApiFallback: {
-      index: '/index',
+      index: '/main',
     },
   },
 });

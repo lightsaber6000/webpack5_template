@@ -1,4 +1,4 @@
-multipage(entry for every page) webpack 5 starter-kit
+one entry webpack 5 starter-kit
 
 features: sass/scss, twig, babel, autoprefixer, cssnano, combine-media-queries, hotreload
 

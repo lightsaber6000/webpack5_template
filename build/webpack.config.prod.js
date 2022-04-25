@@ -1,8 +1,10 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const { merge } = require('webpack-merge');
 const path = require('path');
 const webpackConfigBase = require('./webpack.config.base.js');
+const HtmlBeautifierPlugin = require('html-beautifier-webpack-plugin');
 
 module.exports = merge(webpackConfigBase('production'), {
   mode: 'production',
@@ -40,20 +42,34 @@ module.exports = merge(webpackConfigBase('production'), {
       },
       {
         test: /\.twig$/,
-        use: ['html-loader', 'twig-html-loader'],
+        use: [
+          {
+            loader: "html-loader",
+            options: {
+              minimize: false,
+            }
+          },
+          {
+            loader: "twig-html-loader",
+          }
+        ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name][ext]'
+          filename: '[name][ext]'
         }
+      },
+      {
+        test: /\.(svg)$/i,
+        type: 'asset/inline',
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'fonts/[name][ext]'
+          filename: '[name][ext]'
         }
       },
     ],
@@ -64,12 +80,16 @@ module.exports = merge(webpackConfigBase('production'), {
       new CssMinimizerPlugin({
         parallel: 10,
       }),
+      new TerserPlugin({
+        parallel: 10,
+      }),
     ],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
+    new HtmlBeautifierPlugin()
   ],
   output: {
     pathinfo: false,
