@@ -10,7 +10,14 @@ module.exports = merge(webpackConfigBase('development'), {
         use: [
           'style-loader',
           { loader: "css-loader", options: { sourceMap: true } },
-          { loader: "sass-loader", options: { sourceMap: true } },
+          { loader: "sass-loader",
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ['legacy-js-api', 'import'],
+              },
+            },
+          },
         ],
       },
       {
